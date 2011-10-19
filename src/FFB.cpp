@@ -19,18 +19,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
-#include "CmdOpt.hpp"
-#include "VideoPartitioner.hpp"
-#include "FireballFinder.hpp"
-#include "VideoBond.hpp"
-#include "TimeSpace.hpp"
-
-#define FFB_VERSION "0.2"
-#define FFB_AUTHOR "Mateusz Szubart"
-#define FFB_AUTHOR_MAIL "<mszubart@gmail.com>"
-
-void merge_clips(boost::ptr_vector<FireballFinder> &finders, boost::ptr_vector<TimeSpace> &clips);
+#include "FFB.hpp"
 
 int main(int ac, char** av) {
     CmdOptions opt(ac, av);
@@ -54,23 +43,16 @@ int main(int ac, char** av) {
         std::cout << "Starting video finder ...\n";
     }
 
+    boost::ptr_vector<TimeSpace> clips;
     boost::thread_group workers;
     boost::ptr_vector<FireballFinder> finders;
 
-    VideoPartitioner *vp = new VideoPartitioner(opt);
-
-    if (!vp->partition_file(workers, finders, opt.get_threads_number())) {
-        std::cerr << "Fatal error: Cannot partition video.";
-        exit(EXIT_FAILURE);
+    if (opt.get_threads_number() > 1) {
+        multithreaded_processing(opt, clips, workers, finders);
     }
-
-    workers.join_all();
-    delete vp;
-
-    boost::ptr_vector<TimeSpace> clips;
-
-    merge_clips(finders, clips);
-    std::sort(clips.begin(), clips.end(), TimeSpace::TimeSpaceComparer());
+    else {
+        linear_processing(opt, clips);
+    }
 
     if (opt.get_verbose())
         if (!clips.empty())
@@ -96,4 +78,31 @@ void merge_clips(boost::ptr_vector<FireballFinder> &finders, boost::ptr_vector<T
         boost::ptr_vector<TimeSpace> *fc = (*finder).get_clips();
         clips.insert(clips.end(), fc->begin(), fc->end());
     }
+}
+
+void linear_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips) {
+    std::cout << "Be warned: One thread mode is experimental.\n";
+    std::cout << "That means it can work properly or eat your cookies and drink your milk.\n";
+    std::cout << "Some reports are telling that it even could bite off your head.\n";
+
+    FireballFinder *ff = new FireballFinder(opt.get_input_file(), 0, opt);
+    ff->process_frames();
+
+    boost::ptr_vector<TimeSpace> *fc = ff->get_clips();
+    clips.insert(clips.end(), fc->begin(), fc->end());
+}
+
+void multithreaded_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips, boost::thread_group &workers, boost::ptr_vector<FireballFinder> &finders) {
+    VideoPartitioner *vp = new VideoPartitioner(opt);
+
+    if (!vp->partition_file(workers, finders, opt.get_threads_number())) {
+        std::cerr << "Fatal error: Cannot partition video.";
+        exit(EXIT_FAILURE);
+    }
+
+    workers.join_all();
+    delete vp;
+
+    merge_clips(finders, clips);
+    std::sort(clips.begin(), clips.end(), TimeSpace::TimeSpaceComparer());
 }
