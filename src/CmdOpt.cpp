@@ -49,19 +49,19 @@ void CmdOptions::_init_options() {
 
 void CmdOptions::_parse_options(int ac, char* av[]) {
     try {
-        po::options_description _desc("Some descriptions were take from OpenCV documentation (http://opencv.itseez.com/modules/refman.html)\nAllowed options:");
+        po::options_description _desc("Some descriptions were taken from OpenCV documentation (http://opencv.itseez.com/modules/refman.html)\nAllowed options:");
         _desc.add_options()
             ("help,h", "Show this message.\n")
             ("input-file", po::value<std::string > (), "File with video material.\n")
             ("skipframes,S", po::value<int>(), "Number of frames to be skipped. Every skipframes-th frame will be processed.\nDefault value = 12\n")
             ("clip-len,L", po::value<int>(), "Single clip length in seconds.\nDefault value = 11\n")
-            ("density", po::value<int>(), "Density of samples is space (in pixels) between the samples.\nDefault value = 16\n")
-            ("min-vect-len", po::value<int>(), "Minimal flow vector lenght to be assumed as movement.\nDefault value = 6\n")
+            ("density", po::value<int>(), "Density of sampling grid - spacing (in pixels) between the samples.\nDefault value = 16\n")
+            ("min-vect-len", po::value<int>(), "Minimal flow vector length to be assumed as movement.\nDefault value = 6\n")
             ("blind_top", po::value<int>(), "Blind field, from frame edge to arg.\nDefault value = 0\n")
             ("blind_left", po::value<int>(), "Blind field, from frame edge to arg.\nDefault value = 0\n")
             ("blind_right", po::value<int>(), "Blind field, from frame edge to arg.\nDefault value = 0\n")
             ("blind_bottom", po::value<int>(), "Blind field, from frame edge to arg.\nDefault value = 20\n")
-            ("threads,T", po::value<int>(), "Set number of threads used for video processing.\nBest value is 1 thread per core thread (eg. Intel i7 has 4 cores and 8 threads, best value is 8). Warning: Video material is divided for each thread so you need at least 2x video size, free hdd space.\nDefault value = 8\n")
+            ("threads,T", po::value<int>(), "Set number of threads used for video processing.\nBest value is 1 thread per core thread (eg. Intel i7 has 4 cores and 8 threads, best value is 8). Warning: Video material is divided for each thread so you need at least 2x video size free hdd space.\nDefault value = 8\n")
             ("pyr-scale", po::value<double>(), "Parameter specifying the image scale (<1) to build pyramids for each image. \npyrScale=0.5 means a classical pyramid, where each next layer is twice smaller than the previous one.\nDefault value = 0.5\n")
             ("levels", po::value<int>(), "Number of pyramid layers including the initial image. \nlevels=1 means that no extra layers are created and only the original images are used.\nDefault value = 3\n")
             ("winsize", po::value<int>(), "Averaging window size. \nLarger values increase the algorithm robustness to image noise and give more chances for fast motion detection, but yield more blurred motion field.\nDefault value = 15\n")
