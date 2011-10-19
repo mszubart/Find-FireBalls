@@ -1,0 +1,64 @@
+Find FireBalls by Mateusz Szubart
+================================================================================
+
+This software is licensed under X11 License, which you can find in the LICENSE 
+file or http://www.opensource.org/licenses/mit-license.html
+
+This software uses the following libraries:
+* Boost C++ Libraries: http://www.boost.org/
+* OpenCV: http://opencv.willowgarage.com/wiki/
+
+================================================================================
+
+-------------------
+How does this work?
+-------------------
+
+Your video material is divided into several partitions (depends on how many 
+threads are used). Each *skipframes* frame is analyzed by OpenCVs uniconrtastic
+algorithm. Then motion vectors are calculated for every point in the comparsion 
+grid. If vector is long enough, the fireball was detected. So the clip is cut.
+Clip begins 1 second before firaball detection and ends *clip-len* later.
+At the end clips are merged into output video.
+
+---------------
+How to install?
+---------------
+
+If you are using Windows, you can download binaries, extract them and use.
+Also you can add FFB direcotry to your PATH or something.
+
+If you are brave enough to compile it (or if you are using Linux or other OS).
+You will need:
+    - Boost 1.47.0 (thread, program_options, system, filesystem libs)
+    - OpenCV 2.3.1
+    - A lot of luck
+    - GCC with C++0x support (or MinGW if you are brave Windows user)
+    - CMake >= 2.6
+
+1. Generate Makefile:
+(in main ffb dir)
+
+    mkdir build
+    cd build
+    cmake .. 
+
+Feel free to discover cmake options ;)
+
+2. Compile ffb
+
+    make
+
+3. Copy binaries whereever you wnat. Remember to provide OpenCV DLLs if you
+choose to use dynamic libs.
+
+--------------
+How to use it?
+--------------
+
+For more information about usage run ffb with --help parameter.
+
+================================================================================
+
+Contact: <mszubart@gmail.com>
+Please resist temptation and don't contact me.
