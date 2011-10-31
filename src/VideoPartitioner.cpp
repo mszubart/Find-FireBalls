@@ -25,8 +25,8 @@
 namespace bfs = boost::filesystem;
 
 VideoPartitioner::~VideoPartitioner() {
-    for (PartitionIterator partition = this->_partitions.begin(); partition != this->_partitions.end(); ++partition) {
-        bfs::path tmp_file((*partition).get_path());
+    for (auto partition : this->_partitions) {
+        bfs::path tmp_file(partition.get_path());
 
         if (bfs::exists(tmp_file))
             bfs::remove(tmp_file);
@@ -90,7 +90,7 @@ bool VideoPartitioner::partition_file(boost::thread_group &worker_group, boost::
     cv::Mat frame;
     cv::VideoWriter wrt;
 
-    VideoPartition *prt = NULL;
+    VideoPartition *prt = nullptr;
 
     long int divnum = this->_cap.get(CV_CAP_PROP_FRAME_COUNT) / parts;
     long int partlen = 0;

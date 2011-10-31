@@ -45,18 +45,13 @@ class FireballFinder {
 public:
 
     FireballFinder(std::string partition_path, long int offset, CmdOptions opt) : _partition_path(partition_path), _offset(offset), _opt(opt) {
-        __init_mutex();
-        open_lock.lock();
-        this->_cap.open(this->_partition_path);
-        open_lock.unlock();
+        __init__();
     }
 
     FireballFinder(VideoPartition vp, CmdOptions opt) : _partition_path(vp.get_path()), _offset(vp.get_offset()), _opt(opt) {
-        __init_mutex();
-        open_lock.lock();
-        this->_cap.open(this->_partition_path);
-        open_lock.unlock();
+        __init__();
     }
+
     virtual ~FireballFinder();
 
     void execute();
@@ -65,12 +60,19 @@ public:
     boost::thread* get_worker() const;
 
 private:
-    bool is_fireball(const cv::Mat& flow);
 
-    void __init_mutex() {
-        this->open_lock = boost::mutex::scoped_lock(open_mutex, boost::defer_lock);
-        this->close_lock = boost::mutex::scoped_lock(close_mutex, boost::defer_lock);
+    void __init__() { 
+        /* Sadly gcc4.6 and 4.7 does not support 'delegating_constructors' */
+        boost::mutex open_mutex;
+        boost::mutex::scoped_lock open_lock;
+
+        open_lock = boost::mutex::scoped_lock(open_mutex, boost::defer_lock);
+        open_lock.lock();
+        this->_cap.open(this->_partition_path);
+        open_lock.unlock();
     }
+
+    bool is_fireball(const cv::Mat& flow);
 
     std::string _partition_path;
     long int _offset;
@@ -78,14 +80,10 @@ private:
     boost::thread* _worker;
     cv::VideoCapture _cap;
     boost::ptr_vector<TimeSpace> _results;
-
-    boost::mutex open_mutex;
-    boost::mutex close_mutex;
-    boost::mutex::scoped_lock open_lock;
-    boost::mutex::scoped_lock close_lock;
 };
 
-typedef boost::ptr_vector<FireballFinder>::iterator FBFinderIterator;
+/* Replaced by C++11 keyword auto */
+//typedef boost::ptr_vector<FireballFinder>::iterator FBFinderIterator;
 
 #endif	/* FIREBALLFINDER_HPP */
 

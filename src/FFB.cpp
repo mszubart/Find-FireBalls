@@ -72,10 +72,9 @@ int main(int ac, char** av) {
 }
 
 void merge_clips(boost::ptr_vector<FireballFinder> &finders, boost::ptr_vector<TimeSpace> &clips) {
-    for (FBFinderIterator finder = finders.begin();
-         finder != finders.end(); ++finder) {
+    for (auto finder : finders) {
 
-        boost::ptr_vector<TimeSpace> *fc = (*finder).get_clips();
+        boost::ptr_vector<TimeSpace> *fc = finder.get_clips();
         clips.insert(clips.end(), fc->begin(), fc->end());
     }
 }

@@ -69,7 +69,8 @@ private:
     cv::VideoCapture _cap;
 };
 
-typedef boost::ptr_vector<TimeSpace>::iterator TimeSpaceIterator;
+/* Replaced by C++11 keyword auto */
+//typedef boost::ptr_vector<TimeSpace>::iterator TimeSpaceIterator;
 
 #endif	/* VIDEOBOND_HPP */
 

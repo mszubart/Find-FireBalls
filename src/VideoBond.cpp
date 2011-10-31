@@ -46,15 +46,15 @@ void VideoBond::bond() {
     Mat frame;
 
     int pos;
-    for (TimeSpaceIterator clip = this->_clips.begin(); clip != this->_clips.end(); ++clip) {
+    for (auto clip : this->_clips) {
 
         pos = this->_cap.get(CV_CAP_PROP_POS_FRAMES);
 
-        if (pos != (*clip).getBegin()) {
-            TimeSpace::skipFrames(this->_cap, (*clip).getBegin() - pos);
+        if (pos != clip.getBegin()) {
+            TimeSpace::skipFrames(this->_cap, clip.getBegin() - pos);
         }
 
-        for (int i = 0; i < (*clip).getLength(); i++) {
+        for (int i = 0; i < clip.getLength(); i++) {
             if (!this->_cap.read(frame)) {
                 break;
             }

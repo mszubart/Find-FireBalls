@@ -39,7 +39,8 @@ private:
     long int _offset;
 };
 
-typedef boost::ptr_vector<VideoPartition>::iterator PartitionIterator;
+/* Replaced by C++11 keyword auto */
+//typedef boost::ptr_vector<VideoPartition>::iterator PartitionIterator;
 
 #endif	/* VIDEOPARTITION_HPP */
 

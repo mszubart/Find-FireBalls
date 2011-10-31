@@ -24,7 +24,7 @@
 #include "cmdopt.hpp"
 
 FireballFinder::~FireballFinder() {
-    if (this->_worker != NULL)
+    if (this->_worker != nullptr)
         delete this->_worker;
 }
 
@@ -55,7 +55,10 @@ bool FireballFinder::is_fireball(const cv::Mat& flow) {
 }
 
 void FireballFinder::process_frames() {
-
+    boost::mutex close_mutex;
+    boost::mutex::scoped_lock close_lock;
+    close_lock = boost::mutex::scoped_lock(close_mutex, boost::defer_lock);
+    
     if (!this->_cap.isOpened())
         return;
 

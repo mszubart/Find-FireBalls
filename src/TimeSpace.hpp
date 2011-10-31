@@ -55,8 +55,8 @@ public:
     };
 
 private:
-    long int _begin; /* Ramka rozpoczynająca sekwencję */
-    int _len; /* Długość sekwencji w ramkach */
+    long int _begin;
+    int _len;
 };
 
 #endif	/* TIMESPACE_HPP */
