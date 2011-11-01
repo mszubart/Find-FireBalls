@@ -51,7 +51,7 @@ int main(int ac, char** av) {
         multithreaded_processing(opt, clips, workers, finders);
     }
     else {
-        linear_processing(opt, clips);
+        linear_processing(opt, clips, finders);
     }
 
     if (opt.get_verbose())
@@ -79,12 +79,10 @@ void merge_clips(boost::ptr_vector<FireballFinder> &finders, boost::ptr_vector<T
     }
 }
 
-void linear_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips) {
-    std::cout << "Be warned: One thread mode is experimental.\n";
-    std::cout << "That means it can work properly or eat your cookies and drink your milk.\n";
-    std::cout << "Some reports are telling that it even could bite off your head.\n";
-
-    FireballFinder *ff = new FireballFinder(opt.get_input_file(), 0, opt);
+void linear_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips, boost::ptr_vector<FireballFinder> &finders) {
+    FireballFinder *ff = new FireballFinder(opt.get_input_file(), 1, opt);
+    finders.push_back(ff);
+    
     ff->process_frames();
 
     boost::ptr_vector<TimeSpace> *fc = ff->get_clips();

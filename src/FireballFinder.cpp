@@ -91,6 +91,8 @@ void FireballFinder::process_frames() {
 
                 TimeSpace::skipFrames(this->_cap, len);
                 prevgray.release();
+                gray.release();
+                flow.release();
                 continue;
             }
         }

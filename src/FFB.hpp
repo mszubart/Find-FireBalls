@@ -29,12 +29,12 @@
 #include "VideoBond.hpp"
 #include "TimeSpace.hpp"
 
-#define FFB_VERSION "0.2"
+#define FFB_VERSION "0.2.1"
 #define FFB_AUTHOR "Mateusz Szubart"
 #define FFB_AUTHOR_MAIL "<mszubart@gmail.com>"
 
 void merge_clips(boost::ptr_vector<FireballFinder> &finders, boost::ptr_vector<TimeSpace> &clips);
-void linear_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips);
+void linear_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips, boost::ptr_vector<FireballFinder> &finders);
 void multithreaded_processing(CmdOptions &opt, boost::ptr_vector<TimeSpace> &clips, boost::thread_group &workes, boost::ptr_vector<FireballFinder> &finders);
 
 #endif	/* FFB_HPP */

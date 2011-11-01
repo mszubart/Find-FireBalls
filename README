@@ -49,7 +49,7 @@ Feel free to discover cmake options ;)
 
     make
 
-3. Copy binaries whereever you wnat. Remember to provide OpenCV DLLs if you
+3. Copy binaries wherever you wnat. Remember to provide OpenCV DLLs if you
 choose to use dynamic libs.
 
 --------------
